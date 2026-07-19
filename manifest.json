@@ -1,0 +1,21 @@
+{
+  "name": "VIP Games Portal",
+  "short_name": "VIP Games",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0f2027",
+  "theme_color": "#121821",
+  "description": "🎮 VIP Games Portal with games, wisdom, leaderboard, and community.",
+  "icons": [
+    {
+      "src": "vip-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "vip-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
