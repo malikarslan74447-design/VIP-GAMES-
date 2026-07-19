@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VIP Games Portal</title>
+    <!-- SEO START -->
+  <meta name="description" content="M.1 Studio presents VIP Games Portal. Download premium Android games like Asphalt 9 with One Click. No Ads, No Login, 100% Free APKs for Pakistan.">
+  <meta name="keywords" content="M.1 Studio, VIP Games Portal, Free Games Download, One Click APK, Android Games Pakistan, Asphalt 9 APK">
+  <meta name="author" content="M.1 Studio">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://malikarslan74447-design.github.io/VIP-GAMES-/" />
+  <!-- SEO END -->
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #f0f0f0;
+    }
+    header {
+      background: #121821;
+      padding: 15px;
+      text-align: center;
+      color: #f5c451;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: b;
+      padding: 5px 10px;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    nav a:hover {
+      background: rgba(245, 196, 81, 0.2);
+    }
+    .page { display: none; padding: 20px; animation: fadeIn 0.5s ease-in-out; }
+    .active { display: block; }
+    .card {
+      background: #1e2a38;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00000050;
+    }
+    input, button {
+      padding: 10px; margin: 5px 0; border-radius: 8px; border: none; font-size: 16px; width: 100%; box-sizing: border-box;
+    }
+    button { cursor: pointer; transition: opacity 0.3s; }
+    button:hover { opacity: 0.9; }
+    .btn { background: #f5c451; color: #000; font-weight: bold; }
+    .pagination-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .page-info {
+      align-self: center;
+      font-weight: bold;
+    }
+    .game-card {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      background: #2c3e50;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 10px;
+      position: relative;
+    }
+    .game-logo {
+      flex: 0 0 auto;
+      margin-right: 15px;
+    }
+    .game-card > div:last-child {
+      flex: 1 1 200px;
+      min-width: 0;
+    }
+    .game-card h3, .game-card p {
+      margin: 5px 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .logo-circle {
+      width: 64px;
+      height: 64px;
+      background: #FFD700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 0 12px #FFD700;
+    }
+    .logo-circle img {
+      width: 58px;
+      height: 58px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    /* ✅ GPU Box Fix with Relative Position for Close Button */
+    .gpu-selection-group {
+      display: none;
+      margin-top: 15px;
+      padding: 12px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+      border: 1px dashed #f5c451;
+      position: relative;
+    }
+    .gpu-selection-group p {
+      color: #f5c451;
+      font-size: 13px;
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    /* ✅ Naya Close Button (Red X) */
+    .close-gpu-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: #ff4d4d !important;
+      color: white !important;
+      width: 24px !important;
+      height: 24px !important;
+      padding: 0 !important;
+      font-size: 14px !important;
+      font-weight: bold !important;
+      border-radius: 50% !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .toggle-screenshots-btn {
+      background: none;
+      color: #f5c451;
+      width: auto;
+      padding: 5px;
+      font-size: 20px;
+      border: none;
+      cursor: pointer;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      transition: transform 0.3s;
+    }
+    .toggle-screenshots-btn.expanded {
+      transform: rotate(180deg);
+    }
+    .screenshots-wrapper {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-out;
+      width: 100%;
+      flex-basis: 100%;
+    }
+    .screenshots-wrapper.show {
+      max-height: 300px;
+      margin-top: 10px;
+    }
+    .screenshots-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 10px;
+      padding-bottom: 10px;
+    }
+    .screenshot-img {
+      width: 160px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: #121821;
+    }
+    .progress-container {
+      width: 100%;
+      background-color: #1a1a1a;
+      border-radius: 5px;
+      margin: 10px 0;
+      display: none;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 10px;
+      background-color: #f5c451;
+      border-radius: 5px;
+      transition: width 0.3s ease;
+    }
+    
+    /* ✅ DISQUS BOX STYLING */
+    #disqus_thread {
+      margin-top: 20px;
+      background: #ffffff; /* Chat ke liye safaid background taake text saaf dikhe */
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+    /* SEO Hidden Description */
+.game-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Sirf 3 lines dikhengi */
+  -webkit-box-orient: vertical;
+  overflow: hidden; /* Baqi sab auto-hide ho jayega */
+  color: #ccc;
+  font-size: 14px;
+  margin: 5px 0;
+  line-height: 1.4;
+}[span_0](start_span)[span_0](end_span)
+    .game-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Sirf 3 lines dikhengi */
+  -webkit-box-orient: vertical;
+  overflow: hidden; /* Baqi sab auto-hide ho jayega */
+  color: #ccc;
+  font-size: 14px;
+  margin: 5px 0;
+  line-height: 1.4;
+}
+
+    </style>
+    </head>
+<body>
+  <header>
+    <h1>🎮 VIP Games Portal</h1>
+    <nav>
+      <a href="#" onclick="showPage('home')">Home</a>
+      <a href="#" onclick="showPage('games')">Games</a>
+      <a href="#" onclick="showPage('apps')">Apps</a>
+      <a href="#" onclick="showPage('wisdom')">Wisdom</a>
+      <a href="#" onclick="showPage('leaderboard')">M.1 STUDIO</a>
+      <a href="#" onclick="showPage('community')">Community</a>
+      <a href="#" onclick="showPage('about')">About</a>
+      <a href="#" onclick="showPage('profile')">Profile</a>
+    </nav>
+  </header>
+
+  <div id="home" class="page active">
+    <div class="card">
+      <h2>Welcome</h2>
+      <p id="dailyQuote"></p>
+    </div>
+  </div>
+
+  <div id="games" class="page">
+    <div class="card">
+      <h2>Games Library</h2>
+      <input type="text" id="searchBar" placeholder="Search games..." onkeyup="filterGames()">
+      <div id="gamesList"></div>
+      <div class="pagination-controls">
+        <button class="btn" id="prevGames" onclick="changePage('games', -1)" style="width: auto;">Previous</button>
+        <span class="page-info" id="gamesPageInfo">Page 1</span>
+        <button class="btn" id="nextGames" onclick="changePage('games', 1)" style="width: auto;">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="apps" class="page">
+    <div class="card">
+      <h2>Apps Station</h2>
+      <input type="text" id="appSearchBar" placeholder="Search apps..." onkeyup="filterApps()">
+      <div id="appsList"></div>
+      <div class="pagination-controls">
+        <button class="btn" id="prevApps" onclick="changePage('apps', -1)" style="width: auto;">Previous</button>
+        <span class="page-info" id="appsPageInfo">Page 1</span>
+        <button class="btn" id="nextApps" onclick="changePage('apps', 1)" style="width: auto;">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="wisdom" class="page">
+    <div class="card">
+      <h2>🌟 Daily Wisdom</h2>
+      <p id="wisdomText" style="font-size: 20px; text-align: center; color: #f5c451; font-weight: bold;"></p>
+    </div>
+  </div>
+
+  <div id="leaderboard" class="page">
+    <div class="card">
+      <h2>🏆 SPECIAL THANKS</h2>
+      <ol>
+        <li>MEER ALI</li>
+        <li>SIKANDAR MIRZA</li>
+        <li>MALIK REHAN</li>
+        <li>MALIK AYAZ</li>
+        <li>SAMEER</li>
+      </ol>
+    </div>
+  </div>
+
+  <div id="community" class="page">
+    <div class="card">
+      <h2>🤝 Community Discussion</h2>
+      <div id="disqus_thread"></div>
+    </div>
+  </div>
+
+  <div id="about" class="page">
+    <div class="card">
+      <h2>About</h2>
+      <p>📱 App Section 
+Coming Soon! 🔥
+We are working hard to bring you amazing apps in the next update. Stay tuned!
+
+Have feedback or any issues? 
+Drop them in the Community section. We are listening 👊</p>
+ <p>VIP Games Portal is your ultimate destination for high-quality games and apps. Explore our library, unlock premium content with codes, and join our community.</p>
+    </div>
+  </div>
+
+  <div id="profile" class="page">
+    <div class="card">
+      <h2>Your Profile</h2>
+      <p id="profileStatus">Guest Mode — No login required.</p>
+    </div>
+  </div>
+
+  <script>
+const UNLOCKS = {
+  // GTA SA - Final & Fixed Links (No more man-mani!)
+  "GTA_ADRENO": "https://archive.org/download/com.rockstargames.gtasa_202601/com.rockstargames.gtasa.zip",
+  "GTA_MALI": "https://archive.org/download/gtasa-lite-mali-gpu/GTASA_Lite_MALI_GPU.zip",
+  "GTA_POWERVR": "https://archive.org/download/gtasa-lite-all-gpu.-7z/GTASA_Lite_All_GPU.7z",
+  
+  // Baqi 19 Games (Total 20 ho jayengi)
+  "MINIPARTY2026": "https://quiet-pegasus-bf6904.netlify.app/download/mini_game.apk",
+  "itachi444": "https://archive.org/download/itachi-1.4-apkpure/Itachi%20%F0%9F%94%A5%20%F0%9F%92%A5_1.4_APKPure.apk",
+  "wcc2026": "https://archive.org/download/wcc2_20260123/wcc2.apk",
+  "FSB526": "https://archive.org/download/fsb_20260129/fsb.apk",
+  "RACING456": "https://archive.org/download/hill-climb-racing-mod_1.67.8-an1.com/hill-climb-racing-mod_1.67.8-an1.com.apk",
+  "DR404": "https://archive.org/download/dr-driving-mod_1.73-an1.com/dr-driving-mod_1.73-an1.com.apk",
+  "FEAR556": "https://archive.org/download/the-fear-2/the%20fear%202.apk",
+  "TRUCK4": "https://archive.org/download/truck-simulator-off-road-4-3.6-old-version/Truck%20Simulator%20OffRoad%204_3.6_APKPure.apk",
+  "TRUCK2026": "https://archive.org/download/truck-simulator-offroad-2-1.1.7-apkpure/Truck%20Simulator%20Offroad%202_1.1.7_APKPure.apk",
+  "GETTING26": "https://archive.org/download/com.noodlecake.gettingoverit_1.9.12-APK_Award/com.noodlecake.gettingoverit_1.9.12-APK_Award.apk",
+  "STR99": "https://archive.org/download/slender-the-arrival-45-apkpure/Slender_%20The%20Arrival_45_APKPure.apk",
+  "BBL567": "https://archive.org/download/big-bash-cricket-2.0-apkpure/Big%20Bash%20Cricket_2.0_APKPure.xapk",
+  "FARMING2026": "https://archive.org/download/farming-simulator-18-mod_1.5.0.3-an1.com/farming-simulator-18-mod_1.5.0.3-an1.com.apk",
+  "VECTOR1": "https://archive.org/download/com.nekki.vector_1.3.4-5000111_minapi19armeabi-v7anodpi_apkmirror.com/com.nekki.vector_1.3.4-5000111_minAPI19%28armeabi-v7a%29%28nodpi%29_apkmirror.com.apk",
+  "SARF2026": "https://archive.org/download/subway-surfers-mod_3.58.0-an1.com/subway-surfers-mod_3.58.0-an1.com.apk",
+  "CAR2026": "https://archive.org/download/asphalt-nitro_202601/asphalt-nitro.apk",
+  "THE FEAR": "https://archive.org/download/the-fear-creepy-scream-house/the-fear-creepy-scream-house.apk",
+  "DEATH1": "https://archive.org/download/death-park-scary-clown-horror-2.2.1-apkpure/Death%20Park_%20Scary%20Clown%20Horror_2.2.1_APKPure.xapk",
+  "TAMPLE2": "https://archive.org/download/temple-run-2-apk-mod-unlimited-money-v-1.86.0-zigmods.com/Temple%20Run%202%20apk%20%28MOD%20-%20Unlimited%20Money%29%20v1.86.0%20zigmods.com.apk",
+  "OLD FF": "https://www.mediafire.com/file/knglxiy50x3wcjl/Rzim_Server_V3_2018.apk/file?dkey=sf326ewlpe1&r=242"
+};
+const GAMES = [
+  { 
+    code: "OLD FF", 
+    name: "FREE FIRE ", 
+    rating: "4.6", 
+    desc: `Size: 450MB | Free Fire Offline Mod: Experience the classic Battle Royale 
+    vibe on any low-end Android mobile. Enjoy intense 10-minute matches, classic maps, 
+    and fast-paced combat without needing a constant internet connection. 
+    Optimized for 2GB RAM phones to ensure zero lag. Download the best Free Fire 
+    offline alternative to master your shooting skills and survival tactics today.`, 
+    logo:'<div class="logo-circle"><img src="freefire.jpg" alt="free fire Icon"></div>',
+    ss: ["freefire1.jpg", "freefire2.jpg", "freefire3.jpg"]
+    
+  },
+  { 
+    code: "GTA SAN", 
+    name: "GTA SAN ANDREAS LITE", 
+    rating: "4.3", 
+    desc: `Size: 350MB | Grand Theft Auto: San Andreas Mobile Lite highly compressed version. 
+    Full mission support, iconic storyline, and 60 FPS gameplay on Adreno, Mali, and PowerVR GPUs. 
+    The best GTA San Andreas Android Lite for 2GB RAM devices. Experience the legendary CJ 
+    storyline with optimized graphics. Easy 1-click installation for a lag-free open-world experience.`, 
+    logo:'<div class="logo-circle"><img src="GTA-SAN.jpg" alt="GTA SAN Icon"></div>',
+    ss: ["pika1.jpg", "pika2.jpg", "pika.jpg"]
+  },
+  { 
+    code: "STR99", 
+    name: "SLENDER THE ARRIVAL", 
+    rating: "4.5", 
+    desc: `Size: 400MB | Experience the most terrifying Slender: The Arrival horror game on Android. 
+    Featuring high-quality 3D graphics and realistic sound effects optimized for Snapdragon 632 
+    and budget smartphones. Survive the forest, unlock mystery levels, and escape the Slender Man. 
+    Download the offline APK today for a premium scary atmosphere without high-end hardware requirements.`, 
+    logo:'<div class="logo-circle"><img src="str.jpg" alt="str.jpg"></div>',
+    ss: ["str1.jpg", "str2.jpg", "str3.jpg"]
+  },
+  { 
+    code: "itachi444", 
+    name: "ITACHI UCHIHA", 
+    rating: "4.2", 
+    desc: `Size: 25MB | Master the legendary Uchiha power in this Itachi 2D action game. 
+    Featuring iconic Tsukuyomi moves and fast-paced Naruto-themed combat mechanics. 
+    Small APK size specifically optimized for smooth performance on low-end mobiles. 
+    If you love Naruto Shippuden, this 2D fighter is a must-play for your collection. 
+    Simple controls, epic boss battles, and zero ads for an offline experience.`, 
+    logo:'<div class="logo-circle"><img src="itachi.jpg" alt="itachi pic"></div>',
+    ss: ["itachi12.jpg", "itachi2.jpg", "itachi3.jpg"]
+  },
+  { 
+    code: "wcc2026", 
+    name: "WCC2", 
+    rating: "4.4", 
+    desc: `Size: 400MB | World Cricket Championship 2 (WCC2) old version APK for professional cricket. 
+    Experience realistic batting animations, dynamic camera angles, and expert commentary. 
+    Fully optimized for 2GB RAM phones to ensure a lag-free tournament experience. 
+    Includes all international teams, leagues, and offline modes. Dominate the pitch 
+    and become a cricket legend in this highly-compressed mobile cricket simulator.`, 
+    logo:'<div class="logo-circle"><img src="wcc-2.jpg" alt="WCC2"></div>',
+    ss: ["wcc1.jpg", "wcc32.jpg", "wcc4.jpg"]
+  },
+  { 
+    code: "FSB526", 
+    name: "FREE SURVIVAL FIRE BATTLEGROUND", 
+    rating: "4.3", 
+    desc: `Size: 300MB | Experience the intense Battle Royale action with Free Survival Fire. 
+    A lightweight, low-storage alternative for survival fans. Optimized for 1GB/2GB RAM, 
+    this offline battleground game features classic maps, loot systems, and shooting mechanics. 
+    Perfect for low-end Androids. Master your survival tactics and win the Booyah in this 
+    optimized mobile shooter without requiring a constant internet connection.`, 
+    logo:'<div class="logo-circle"><img src="fsb.jpg" alt="FSB PIC"></div>',
+    ss: ["fsb1.jpg", "fsb2.jpg", "fsb3.jpg"] 
+  },
+  { 
+    code: "RACING456", 
+    name: "HILL CLIMB RACING", 
+    rating: "4.5", 
+    desc: `Size: 55MB | Hill Climb Racing Mod APK with unlimited money, fuel, and unlocked vehicles. 
+    Physics-based racing fun that never gets old. Explore diverse terrains like the Moon, 
+    desert, and icy mountains. Optimized for extremely low-storage devices. 
+    Download the modified version for endless upgrades and customization. 
+    The most addictive offline racing game, perfect for killing time on any Android mobile.`, 
+    logo:'<div class="logo-circle"><img src="HILL.jpg" alt="CLIMB Icon"></div>',
+    ss: ["hill1.jpg", "hill2.jpg", "hill3.jpg"] 
+  },
+  { 
+    code: "DR404", 
+    name: "DR DRIVING", 
+    rating: "4.4", 
+    desc: `Size: 12MB | Dr. Driving APK: The classic parking and driving simulator for Android. 
+    Includes all premium cars, missions, and stages unlocked. Experience realistic driving 
+    physics, traffic rules, and multiplayer modes in a tiny 12MB package. 
+    Best offline driving game for 2GB RAM devices. If you want a smooth driving simulator 
+    that doesn't lag on your phone, Dr. Driving is the ultimate choice.`, 
+    logo:'<div class="logo-circle"><img src="DR-D.jpg" alt="DR DRIVING Icon"></div>',
+    ss: ["Dr1.jpg", "Dr2.jpg", "Dr3.jpg"] 
+  },
+  { 
+    code: "FEAR556", 
+    name: "THE FEAR 2", 
+    rating: "4.3", 
+    desc: `Size: 60MB | The Fear 2: Creepy Scream House is a bone-chilling horror masterpiece. 
+    Investigate the mystery of the haunted house with high-tension gameplay and jumpscares. 
+    Optimized for low-end mobile devices to provide a stable, terrifying 3D experience. 
+    If you love scary games and horror puzzles, download this APK to test your nerves. 
+    Warning: Not for the faint-hearted! Play with headphones for the best experience.`,  
+    logo:'<div class="logo-circle"><img src="FEAR.jpg" alt="madara Icon"></div>',
+    ss: ["fear1.jpg", "fear2.jpg", "fear3.jpg"]
+  },
+  { 
+    code: "TRUCK2026", 
+    name: "TRUCK SIMULATOR OFF ROAD 2", 
+    rating: "4.2", 
+    desc: `Size: 90MB | Realistic Truck Simulator Off Road 2 for Android mobile. 
+    Features heavy-duty trucks, mud-crawling tracks, and challenging forest missions. 
+    Highly compressed and optimized to run perfectly on any budget smartphone. 
+    Experience the thrill of off-road driving with high-detail textures and smooth 
+    physics controls. Download today to master the art of heavy vehicle transportation.`, 
+    logo:'<div class="logo-circle"><img src="truck2.jpg" alt="Truck Sim 2"></div>',
+    ss: ["trucki1.jpg", "trucki2.jpg", "trucki3.jpg"]
+  },
+  { 
+    code: "GETTING26", 
+    name: "GETTING OVER IT", 
+    rating: "4.4", 
+    desc: `Size: 120MB | Getting Over It with Bennett Foddy: The ultimate test of patience. 
+    Climb the treacherous mountain with only a hammer. Fully optimized for Moto G7 Play 
+    and other 2GB RAM devices. Includes precise physics controls and high-quality 
+    assets in a compressed APK. If you are looking for a challenging, physics-based 
+    platformer to push your limits, this is the definitive Android version.`, 
+    logo:'<div class="logo-circle"><img src="getting.jpg" alt="getting"></div>',
+    ss: ["gt1.jpg", "gt2.jpg", "gt3.jpg"]
+  },
+  { 
+    code: "SARF2026", 
+    name: "SUBWAY SURFERS", 
+    rating: "4.3", 
+    desc: `Size: 150MB | Subway Surfers Mod APK: Unlimited coins, keys, and all characters unlocked. 
+    The world's most famous endless runner with smooth, jitter-free performance. 
+    Perfectly optimized for low-end Androids to ensure you never lose a high score to lag. 
+    Surf through the rails, collect power-ups, and outrun the inspector. 
+    Download the latest modded version for the complete arcade running experience.`, 
+    logo:'<div class="logo-circle"><img src="SARF.jpg" alt="subway Icon"></div>',
+    ss: ["sub1.jpg", "sub2.jpg", "sub3.jpg"]
+  },
+  { 
+    code: "TAMPLE2", 
+    name: "TUMPLE RUN 2", 
+    rating: "4.5", 
+    desc: `Size: 110MB | Temple Run 2 Mod APK: Unlimited gems and all legendary maps unlocked. 
+    Experience the classic chase in this highly optimized endless runner. 
+    Designed for smooth performance on old Android versions and low-RAM devices. 
+    Run, jump, and slide through dangerous obstacles. The best offline runner game 
+    for mobile, offering endless entertainment with zero lag or performance issues.`, 
+    logo:'<div class="logo-circle"><img src="tample.jpg" alt="TAMPLE2 Icon"></div>',
+    ss: ["tmp1.jpg", "tmp2.jpg", "tmp3.jpg"]
+  },
+  { 
+    code: "VECTOR1", 
+    name: "VECTOR", 
+    rating: "4.2", 
+    desc: `Size: 50MB | Vector 1.3.4 classic edition: The original parkour-inspired action runner. 
+    Featuring fluid silhouette animations and fast-paced gameplay. Optimized specifically 
+    for 2GB RAM mobiles. No energy system, no ads, just pure parkour action. 
+    Experience the thrill of the chase in a dystopian world. A must-have for every 
+    action gaming fan looking for a lightweight, highly-polished 2D arcade game.`, 
+    logo:'<div class="logo-circle"><img src="Vector.jpg" alt="VECTOR Icon"></div>',
+    ss: ["vector1.jpg", "vector2.jpg", "vector3.jpg"]
+  },
+  { 
+    code: "BBL567", 
+    name: "BIG BASH LEAGUE", 
+    rating: "4.4", 
+    desc: `Size: 60MB | Official Big Bash League Cricket v1.0.7 for Android. 
+    Play as your favorite Australian T20 cricket teams with authentic player skills. 
+    Best cricket experience for budget smartphones. Smooth batting and bowling controls 
+    make it the ideal offline cricket game. Download now to enjoy realistic 
+    tournament cricket on your mobile device without any heavy system requirements.`, 
+    logo:'<div class="logo-circle"><img src="BBL.jpg" alt="BBL"></div>',
+    ss: ["bbl1.jpg", "bbl2.jpg", "bbl3.jpg"]
+  },
+  { 
+    code: "FARMING2026", 
+    name: "FARMING SIMULATOR 18", 
+    rating: "4.3", 
+    desc: `Size: 160MB | Farming Simulator 18 Mod APK: Unlimited money to build your empire. 
+    Manage your farm, harvest crops, and drive realistic machinery from top brands. 
+    Fully optimized for 2GB RAM phones, providing high-detail farming in a compressed package. 
+    The best offline simulation game for Android. Whether you want to plant, plow, or harvest, 
+    FS18 offers the most detailed rural life experience on your phone.`, 
+    logo:'<div class="logo-circle"><img src="FS18.jpg" alt="FARMING Icon"></div>',
+    ss: ["frm1.jpg", "frm2.jpg", "frm3.jpg"]
+  },
+  { 
+    code: "DEATH1", 
+    name: "DEATH PARK", 
+    rating: "4.3", 
+    desc: `Size: 150MB | Death Park: Scary Clown Survival. A terrifying horror game with 
+    multiple endings and deep puzzle-solving mechanics. Explore the abandoned circus 
+    with high-quality graphics that run smoothly on 2GB RAM devices. 
+    If you love horror and survival games, download Death Park now. 
+    Face your fears in an immersive, offline, and atmospheric horror adventure for Android.`, 
+    logo:'<div class="logo-circle"><img src="death.jpg" alt="DEATH Icon"></div>',
+    ss: ["dth1.jpg", "dth2.jpg", "dth3.jpg"]
+  },
+  { 
+    code: "CAR2026", 
+    name: "ASPHALT NITRO", 
+    rating: "4.2", 
+    desc: `Size: 45MB | Asphalt Nitro: The ultimate racing experience in just 45MB. 
+    Get the intensity of high-speed car racing with stunt modes and licensed supercars. 
+    100% lag-free and highly optimized for Moto G7 Play and low-end Androids. 
+    Why play big games when you can have elite racing in a tiny size? 
+    Download the best offline racing APK today and dominate the leaderboard!`, 
+    logo:'<div class="logo-circle"><img src="asphalt.jpg" alt="Asphalt Icon"></div>',
+    ss: ["car1.jpg", "car2.jpg", "car3.jpg"]
+  },
+  { 
+    code: "TRUCK4", 
+    name: "TRUCK SIMULATOR OFF ROAD 4", 
+    rating: "4.4", 
+    desc: `Size: 110MB | Truck Simulator Off Road 4: Extreme driving in mud, forest, 
+    and extreme terrain. Specifically optimized to prevent crashes and lagging on 
+    2GB RAM Snapdragon smartphones. Test your skills on difficult missions and 
+    heavy-duty trucks. Download the best off-road simulator for Android for 
+    unparalleled truck driving fun in an offline environment.`, 
+    logo:'<div class="logo-circle"><img src="truck4.jpg" alt="Truck Sim 4"></div>',
+    ss: ["trucks1.jpg", "trucks2.jpg", "trucks3.jpg"]
+  },
+  { 
+    code: "THE FEAR", 
+    name: "THE FEAR CREEPY", 
+    rating: "4.6", 
+    desc: `Size: 60MB | The Fear: Creepy Scream House. A psychological horror game 
+    designed to deliver intense jumpscares and eerie suspense. Perfectly compatible 
+    with 2GB RAM mobiles for a smooth, glitch-free experience. If you think you are 
+    brave, download this offline horror APK. Solve the mystery and survive the 
+    haunted house. The ultimate mobile horror thriller you have been looking for.`, 
+    logo:'<div class="logo-circle"><img src="thefear.jpg" alt="The Fear Icon"></div>',
+    ss: ["the1.jpg", "the2.jpg", "the3.jpg"]
+  },
+  { 
+    code: "MINIPARTY2026", 
+    name: "Mini Party", 
+    rating: "4.6", 
+    desc: `Size: 35MB | Ultimate collection of 20+ multiplayer mini-games to play offline. 
+    Experience lag-free gaming with smooth controls on low-end Android devices. 
+    Perfectly optimized for 2GB RAM mobiles like Moto G7 Play. No internet required, 
+    just download the Mini Party APK and enjoy classic casual gaming anywhere. 
+    Includes arcade, puzzle, and racing modes in one single package.`, 
+    logo: '<div class="logo-circle"><img src="my-pic.jpg" alt="Mini Party Icon"></div>',
+    ss: ["mini1.jpg", "mini2.jpg", "mini3.jpg"]
+    
+    }
+];
+
+const APPS = [
+  { code: "APPLOCK2026", name: "App Lock", rating: "4.4", desc: "Secure your apps with a smart lock.", logo:'<div class="logo-circle"><img src="lock.png" alt="App Lock Icon"></div>' },
+  { code: "NOTES2026", name: "Smart Notes", rating: "4.5", desc: "Organize your thoughts and tasks easily.", logo:'<div class="logo-circle"><img src="notes.png" alt="Smart Notes Icon"></div>' },
+  { code: "CAMERA2026", name: "Camera Plus", rating: "4.3", desc: "Capture sharp photos with ease.", logo:'<div class="logo-circle"><img src="camera.png" alt="Camera Plus Icon"></div>' },
+  { code: "MUSIC2026", name: "Music Player", rating: "4.4", desc: "Play and manage your favorite tracks.", logo:'<div class="logo-circle"><img src="music.png" alt="Music Player Icon"></div>' },
+  { code: "VIDEO2026", name: "Video Stream", rating: "4.2", desc: "Stream videos smoothly anytime.", logo:'<div class="logo-circle"><img src="video.png" alt="Video Stream Icon"></div>' },
+  { code: "BROWSER2026", name: "Smart Browser", rating: "4.3", desc: "Fast browsing with privacy mode.", logo:'<div class="logo-circle"><img src="browser.png" alt="Smart Browser Icon"></div>' },
+  { code: "CALC2026", name: "Calculator Pro", rating: "4.5", desc: "Advanced calculator with history.", logo:'<div class="logo-circle"><img src="calc.png" alt="Calculator Pro Icon"></div>' },
+  { code: "WEATHER2026", name: "Weather Now", rating: "4.4", desc: "Live forecasts and alerts.", logo:'<div class="logo-circle"><img src="weather.png" alt="Weather Now Icon"></div>' },
+  { code: "HEALTH2026", name: "Health Tracker", rating: "4.3", desc: "Track fitness and wellness goals.", logo:'<div class="logo-circle"><img src="health.png" alt="Health Tracker Icon"></div>' },
+  { code: "MAPS2026", name: "Maps Navigator", rating: "4.5", desc: "Navigate routes with offline maps.", logo:'<div class="logo-circle"><img src="maps.png" alt="Maps Navigator Icon"></div>' },
+  { code: "SHOP2026", name: "Shop Easy", rating: "4.2", desc: "Smart shopping deals and lists.", logo:'<div class="logo-circle"><img src="shop.png" alt="Shop Easy Icon"></div>' },
+  { code: "CHAT2026", name: "Chat Connect", rating: "4.4", desc: "Stay connected with friends.", logo:'<div class="logo-circle"><img src="chat.png" alt="Chat Connect Icon"></div>' },
+  { code: "EMAIL2026", name: "Email Client", rating: "4.3", desc: "Manage multiple accounts easily.", logo:'<div class="logo-circle"><img src="email.png" alt="Email Client Icon"></div>' },
+  { code: "FILE2026", name: "File Manager", rating: "4.5", desc: "Organize files with smart tools.", logo:'<div class="logo-circle"><img src="file.png" alt="File Manager Icon"></div>' },
+  { code: "PHOTO2026", name: "Photo Editor", rating: "4.4", desc: "Edit and enhance your photos.", logo:'<div class="logo-circle"><img src="photo.png" alt="Photo Editor Icon"></div>' },
+  { code: "PDF2026", name: "PDF Reader", rating: "4.3", desc: "Read and annotate PDFs easily.", logo:'<div class="logo-circle"><img src="pdf.png" alt="PDF Reader Icon"></div>' },
+  { code: "TASK2026", name: "Task Manager", rating: "4.4", desc: "Plan and track your tasks.", logo:'<div class="logo-circle"><img src="task.png" alt="Task Manager Icon"></div>' },
+  { code: "DIARY2026", name: "Daily Diary", rating: "4.2", desc: "Write and secure your notes.", logo:'<div class="logo-circle"><img src="diary.png" alt="Daily Diary Icon"></div>' },
+  { code: "TRANSLATE2026", name: "Quick Translate", rating: "4.5", desc: "Translate text in real time.", logo:'<div class="logo-circle"><img src="translate.png" alt="Quick Translate Icon"></div>' },
+  { code: "NEWS2026", name: "News Feed", rating: "4.3", desc: "Stay updated with latest headlines.", logo:'<div class="logo-circle"><img src="news.png" alt="News Feed Icon"></div>' }
+];
+
+const WISDOMS = [
+  "NAMAZ DEEN KA SUTOON HAI.", 
+  "Dosron ki madad karo allah pak apki madad kary ga.", 
+  "ہمشہ حق اور سچ کا ساتھ دو", 
+  "Apny MAN BAAP ki Izzat Krna He kamyabi hai.",
+  "Takhleef ke baad asani zaroor aati hai.",
+  "Dil saaf rakho, Allah sab dekh raha hai.",
+  "Aaj ka kaam kal par mat chhoro.",
+  "Maan ke qadmon ke neeche jannat hai.",
+  "Sach karwa hota hai magar nijaat deta hai.",
+  "Gharoor insan ko gira deta hai.",
+  "Dusron ke liye asani karo, Allah tumhare liye karega.",
+  "Istighfar karo, dil ka bojh halka hoga.",
+  "Meharban bano, dunya meharban ban jayegi.",
+  "Rizq Allah deta hai, insan nahi.",
+  "Khamoshi aadha masla hal kar deti hai.",
+  "Gunah chota ho ya bara, gunah hi hota hai.",
+  "Neki kar darya me daal."
+];
+const QUOTES = ["Every day is a new chance to level up.", "Kindness is the ultimate cheat code.", "Respect makes you stronger than any boss fight."];
+
+let currentGamesPage = 1, currentAppsPage = 1;
+const itemsPerPage = 5;
+
+// ✅ 7-Day Automatic Wisdom (Har din khud badlega)
+function initWeeklyWisdom() {
+  const wisdomContainer = document.getElementById('dailyQuote');
+  if (!wisdomContainer) return;
+
+  const weeklyList = [
+    "Apne waqt ki hifazat karein, yehi aapki sab se bari doulat hai. ✨", // Sunday (0)
+    "Neki choti ho ya bari, kabhi zaya nahi jati. 🌙",                 // Monday (1)
+    "Sabr ka phal hamesha meetha hota hai, bas yaqeen rakhein. 🤲",    // Tuesday (2)
+    "Dusron ki madad karna hi asal kamyabi hai. 🤝",                  // Wednesday (3)
+    "Har mushkil ke baad aasani hai, mayoos na hon. 🌈",             // Thursday (4)
+    "Jumma Mubarak! Aaj kasrat se Darood Shareef parhein. 🕌",        // Friday (5)
+    "Achi soch hi insaan ko bara banati hai. 💡"                      // Saturday (6)
+  ];
+
+  const todayIndex = new Date().getDay(); 
+  const todayMessage = weeklyList[todayIndex];
+
+  wisdomContainer.innerHTML = `
+    <div style="border-left: 4px solid #f5c451; padding-left: 15px; margin: 10px 0;">
+      <small style="color: #f5c451; font-weight: bold; display: block; text-transform: uppercase;">🌙 Aaj Ki Achi Baat:</small>
+      <span style="color: #fff; font-style: italic; font-size: 14px;">"${todayMessage}"</span>
+    </div>
+  `;
+}
+
+// Device ID Function
+function getDeviceId() {
+  let id = localStorage.getItem('vip_device_id');
+  if (!id) {
+    id = 'ID-' + Math.random().toString(36).substr(2, 4).toUpperCase();
+    localStorage.setItem('vip_device_id', id);
+  }
+  return id;
+}
+
+// Page load par wisdom chalayein
+initWeeklyWisdom();
+const deviceId = getDeviceId();
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  
+  if(id==="wisdom") {
+    document.getElementById('wisdomText').innerText = WISDOMS[Math.floor(Math.random()*WISDOMS.length)];
+  }
+  
+  // ✅ Yahan se faltu line hata di hai taake 7-din wala message fix rahe
+  
+  if(id==="games") renderItems('games', GAMES, currentGamesPage);
+  if(id==="apps") renderItems('apps', APPS, currentAppsPage);
+}
+function changePage(type, delta) {
+  if (type === 'games') {
+    const next = currentGamesPage + delta;
+    if (next >= 1 && next <= Math.ceil(GAMES.length / itemsPerPage)) {
+      currentGamesPage = next;
+      renderItems('games', GAMES, currentGamesPage);
+    }
+  } else {
+    const next = currentAppsPage + delta;
+    if (next >= 1 && next <= Math.ceil(APPS.length / itemsPerPage)) {
+      currentAppsPage = next;
+      renderItems('apps', APPS, currentAppsPage);
+    }
+  }
+}
+
+// ✅ GPU groups ko handle karne ka function
+function hideAllGPUGroups() {
+  document.querySelectorAll('.gpu-selection-group').forEach(group => {
+    group.style.display = 'none';
+  });
+  document.querySelectorAll('.game-card input, .game-card .btn').forEach(el => {
+    if (!el.getAttribute('onclick') || !el.getAttribute('onclick').includes('startDownloadProcess')) {
+       el.style.display = 'block';
+    }
+  });
+}
+
+function renderItems(type, fullList, page, filterQuery = "") {
+  const listToRender = filterQuery ? fullList.filter(item => item.name.toLowerCase().includes(filterQuery) || item.desc.toLowerCase().includes(filterQuery) || item.code.toLowerCase().includes(filterQuery)) : fullList;
+  const totalPages = Math.ceil(listToRender.length / itemsPerPage);
+  const container = document.getElementById(type === 'games' ? 'gamesList' : 'appsList');
+  const pageInfo = document.getElementById(type === 'games' ? 'gamesPageInfo' : 'appsPageInfo');
+  container.innerHTML = "";
+  const start = (page - 1) * itemsPerPage, end = start + itemsPerPage;
+  const pageItems = listToRender.slice(start, end);
+
+  pageItems.forEach(item => {
+    const screenshots = (item.ss && item.ss.length > 0) ? item.ss : [
+      `https://placehold.co/320x200/203a43/f5c451?text=${item.name.replace(/\s+/g, '+')}+1`,
+      `https://placehold.co/320x200/203a43/f5c451?text=${item.name.replace(/\s+/g, '+')}+2`,
+      `https://placehold.co/320x200/203a43/f5c451?text=${item.name.replace(/\s+/g, '+')}+3`
+    ];
+
+    const div = document.createElement('div');
+    div.className = "game-card";
+    div.innerHTML = `
+      <button id="toggle_btn_${item.code}" class="toggle-screenshots-btn" onclick="toggleScreenshots('${item.code}')">⬇️</button>
+      <div class="game-logo">${item.logo}</div>
+      <div>
+        <h3>${item.name} ★ ${item.rating}</h3>
+          <div class="game-desc">${item.desc}</div>
+        <p><b style="color: #f5c451;">Code:</b> <span style="color: lightgreen ; font-weight: bold; border: 1px dashed #f5c451; padding: 2px 5px;">${item.code}</span></p>
+        <input id="input_${item.code}" placeholder="Enter code to download">
+        <div id="progress_container_${item.code}" class="progress-container"><div id="progress_bar_${item.code}" class="progress-bar"></div></div>
+        
+        <button id="btn_${item.code}" class="btn" onclick="checkCode('${item.code}')">Download</button>
+        
+        <div id="gpu_group_${item.code}" class="gpu-selection-group">
+          <button class="close-gpu-btn" onclick="hideAllGPUGroups()">✕</button>
+          <p>SELECT YOUR GPU ARCHITECTURE:</p>
+          <button class="btn" onclick="startDownloadProcess('${item.code}', 'GTA_ADRENO')">🚀 DOWNLOAD ADRENO</button>
+          <button class="btn" onclick="startDownloadProcess('${item.code}', 'GTA_MALI')">🚀 DOWNLOAD MALI</button>
+          <button class="btn" onclick="startDownloadProcess('${item.code}', 'GTA_POWERVR')">🚀 DOWNLOAD POWER VR</button>
+        </div>
+
+        <p id="msg_${item.code}"></p>
+      </div>
+      <div id="shots_wrapper_${item.code}" class="screenshots-wrapper">
+        <div class="screenshots-container">${screenshots.map(src => `<img src="${src}" class="screenshot-img" alt="Screenshot">`).join('')}</div>
+      </div>`;
+    container.appendChild(div);
+  });
+  pageInfo.innerText = `Page ${page} of ${totalPages || 1}`;
+  const prevBtn = document.getElementById(type === 'games' ? 'prevGames' : 'prevApps');
+  const nextBtn = document.getElementById(type === 'games' ? 'nextGames' : 'nextApps');
+  if (prevBtn) prevBtn.disabled = (page <= 1);
+  if (nextBtn) nextBtn.disabled = (page >= totalPages);
+}
+
+function toggleScreenshots(code) {
+  const wrapper = document.getElementById('shots_wrapper_' + code);
+  const btn = document.getElementById('toggle_btn_' + code);
+  const isShowing = wrapper.classList.contains('show');
+  if (isShowing) {
+    wrapper.classList.remove('show');
+    btn.classList.remove('expanded');
+  } else {
+    wrapper.classList.add('show');
+    btn.classList.add('expanded');
+  }
+}
+
+function filterGames(){ 
+  const query = document.getElementById('searchBar').value.toLowerCase(); 
+  currentGamesPage = 1; 
+  renderItems('games', GAMES, currentGamesPage, query); 
+}
+
+function filterApps(){ 
+  const query = document.getElementById('appSearchBar').value.toLowerCase(); 
+  currentAppsPage = 1; 
+  renderItems('apps', APPS, currentAppsPage, query); 
+}
+
+function startDownloadProcess(code, unlockKey) {
+  const msg = document.getElementById('msg_' + code);
+  const btn = document.getElementById('btn_' + code);
+  const gpuGroup = document.getElementById('gpu_group_' + code);
+  const progressContainer = document.getElementById('progress_container_' + code);
+  const progressBar = document.getElementById('progress_bar_' + code);
+  const inputEl = document.getElementById('input_' + code);
+
+  if(gpuGroup) gpuGroup.style.display = "none";
+  msg.innerText = "Connecting to Secure Server...";
+  progressContainer.style.display = "block";
+
+  let width = 0;
+  const interval = setInterval(() => {
+    if (width >= 100) {
+      clearInterval(interval);
+      msg.innerText = "Extracting Package...";
+      setTimeout(() => {
+        msg.innerText = "Installation Complete!";
+        const link = UNLOCKS[unlockKey] || UNLOCKS[code] || "#";
+        const a = document.createElement('a');
+        a.href = link;
+        a.download = '';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        setTimeout(() => {
+          btn.innerText = "Download again";
+          btn.style.display = "block";
+          inputEl.style.display = "block";
+          inputEl.value = "";
+          progressContainer.style.display = "none";
+          progressBar.style.width = "0%";
+          msg.innerText = "";
+        }, 3000);
+      }, 1500);
+    } else {
+      width += Math.random() * 8;
+      if (width > 100) width = 100;
+      progressBar.style.width = width + "%";
+      msg.innerText = "Downloading Content: " + Math.floor(width) + "%";
+    }
+  }, 400);
+}
+
+async function checkCode(code){
+  const inputEl = document.getElementById('input_' + code);
+  if (!inputEl) return;
+  const input = inputEl.value.trim();
+  const msg = document.getElementById('msg_' + code);
+  const btn = document.getElementById('btn_' + code);
+  
+  if(input === code){
+    hideAllGPUGroups();
+    if(code === "GTA SAN") {
+        btn.style.display = "none";
+        inputEl.style.display = "none";
+        document.getElementById('gpu_group_' + code).style.display = "block";
+    } else {
+        startDownloadProcess(code, code);
+    }
+  } else {
+    msg.innerText = "Invalid code. Please try again.";
+    msg.style.color = "#ff4d4d";
+    setTimeout(() => { msg.innerText = ""; msg.style.color = ""; }, 3000);
+  }
+}
+
+// ==========================================
+// 🚀 1. UPDATE SYSTEM (Yahan Fit Kar Diya Hai)
+// ==========================================
+const currentVersion = "1.0.0"; 
+const versionFileUrl = "version.json"; 
+
+async function checkForUpdates() {
+  try {
+    // "no-store" taake install hui app purani file na uthaye
+    const response = await fetch(versionFileUrl + "?t=" + new Date().getTime(), {
+      cache: "no-store" 
+    }); 
+    const data = await response.json();
+
+    if (data.latestVersion !== currentVersion) {
+      const updateDiv = document.createElement("div");
+      updateDiv.className = "card";
+      updateDiv.style.cssText = "border: 2px solid #f5c451; background: #121821; color: white; text-align: center; padding: 15px; border-radius: 10px; margin-bottom: 20px; animation: fadeIn 0.5s; position: relative; z-index: 10000;";
+      updateDiv.innerHTML = `
+        <h3 style="color: #f5c451; margin: 0;">🚀 New Update: v${data.latestVersion}</h3>
+        <p style="font-size: 13px; margin: 10px 0;">${data.changes}</p>
+        <button class="btn" onclick="window.location.href='${data.downloadLink}'" style="background:#f5c451; color:black; font-weight:bold; width:100%; padding:10px; border-radius:5px; border:none; cursor:pointer;">Download Now</button>
+      `;
+      const homePage = document.getElementById('home');
+      if(homePage) homePage.prepend(updateDiv);
+    }
+  } catch (e) {
+    console.log("Update check skip.");
+  }
+}
+checkForUpdates();
+
+// ==========================================
+// ✅ 2. DISQUS CHAT SYSTEM
+// ==========================================
+var disqus_config = function () {
+    this.page.url = window.location.href;  
+    this.page.identifier = window.location.pathname; 
+};
+
+(function() { 
+    var d = document, s = d.createElement('script');
+    s.src = 'https://vip-games-portal.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+})();
+
+document.getElementById('dailyQuote').innerText = QUOTES[Math.floor(Math.random()*QUOTES.length)];
+</script>
+</body> 
+</html>
+
+
